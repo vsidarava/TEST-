@@ -27,7 +27,6 @@ playwright:
     - docker compose -f docker-compose-ci.yml up -d
     - cd ..
     - docker build -t playwright-tests .
-    - sleep 60
     - docker run --network awesome-localstack_my-private-ntwk playwright-tests
   artifacts:
     when: always
