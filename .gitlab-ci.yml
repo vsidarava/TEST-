@@ -6,12 +6,16 @@ services:
 variables:
   DOCKER_HOST: tcp://docker:2376
   DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_TLS_VERIFY: 1
+  DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
 
 stages:
   - test
 
 before_script:
-  - apt-get update && apt-get install -y git
+  - apt-get update && apt-get install -y git curl
+  - curl -fsSL https://get.docker.com -o get-docker.sh
+  - sh get-docker.sh
   - curl -L "https://github.com/docker/compose/releases/download/v2.29.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   - chmod +x /usr/local/bin/docker-compose
 
