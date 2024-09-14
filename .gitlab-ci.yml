@@ -26,9 +26,8 @@ playwright:
     - cd awesome-localstack
     - docker compose -f docker-compose-ci.yml up -d
     - cd ..
-    - docker network create my-private-ntwk
     - docker build -t playwright-tests .
-    - docker run --network my-private-ntwk playwright-tests
+    - docker run --network awesome-localstack_my-private-ntwk playwright-tests
   artifacts:
     when: always
     paths:
