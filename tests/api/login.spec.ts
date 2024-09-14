@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.skip('successful login', async ({ request }) => {
+test('successful login', async ({ request }) => {
   const response = await request.post('http://localhost:4001/users/signin', {
     data: {
       username: 'admin',
