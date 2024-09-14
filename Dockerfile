@@ -15,7 +15,7 @@ COPY . .
 # Install Playwright browsers and dependencies
 RUN npx playwright install --with-deps
 
-ENV APP_URL=http://host.docker.internal:4001
+ENV APP_URL=http://backend:4001
 
 # Command to run tests
 CMD ["npx", "playwright", "test"]
