@@ -11,7 +11,9 @@ stages:
   - test
 
 before_script:
-  - apt-get update && apt-get install -y git docker-compose
+  - apt-get update && apt-get install -y git
+  - curl -L "https://github.com/docker/compose/releases/download/v2.29.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  - chmod +x /usr/local/bin/docker-compose
 
 playwright:
   stage: test
