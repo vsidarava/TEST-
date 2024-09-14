@@ -1,26 +1,33 @@
 image: mcr.microsoft.com/playwright:v1.47.1-noble
 
+services:
+  - docker:24.0.5-dind
+
+variables:
+  DOCKER_HOST: tcp://docker:2376
+  DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_TLS_VERIFY: 1
+  DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+
 stages:
   - test
 
 before_script:
-  - apt-get update && apt-get install -y curl gnupg lsb-release curl
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-  - echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
-  - apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io
+  - apt-get update && apt-get install -y git curl
+  - curl -fsSL https://get.docker.com -o get-docker.sh
+  - sh get-docker.sh
   - curl -L "https://github.com/docker/compose/releases/download/v2.29.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   - chmod +x /usr/local/bin/docker-compose
-  - dockerd &
-  - sleep 10
 
 playwright:
   stage: test
   script:
     - git clone https://github.com/slawekradzyminski/awesome-localstack.git
     - cd awesome-localstack
-    - docker-compose up -d
+    - docker compose -f docker-compose-ci.yml up -d
     - cd ..
-    - docker ps -a  # This will show all running containers
+    - sleep 2
+    - docker info
     - npm ci
     - npx playwright test
   artifacts:
