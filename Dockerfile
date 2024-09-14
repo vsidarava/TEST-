@@ -20,7 +20,7 @@ ENV BACKEND_URL=http://backend:4001
 ENV FRONTEND_URL=http://frontend:8081
 
 # Create a shell script to run tests and set exit code
-RUN echo '#!/bin/sh\nnpx playwright test\nexit $?' > /app/run-tests.sh && chmod +x /app/run-tests.sh
+RUN echo '#!/bin/sh\nnpx playwright test --reporter=list\nexit $?' > /app/run-tests.sh && chmod +x /app/run-tests.sh
 
 # Command to run tests
 CMD ["/app/run-tests.sh"]
