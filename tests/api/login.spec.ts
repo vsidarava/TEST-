@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const appUrl = process.env.APP_URL || 'http://backend:4001';
+const appUrl = process.env.BACKEND_URL || 'http://localhost:4001';
 
 test('successful login', async ({ request }) => {
   const response = await request.post(`${appUrl}/users/signin`, {
