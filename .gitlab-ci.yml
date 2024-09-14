@@ -27,6 +27,7 @@ playwright:
     - docker compose -f docker-compose-ci.yml up -d
     - cd ..
     - sleep 60
+    - docker network create my-private-ntwk
     - docker build -t playwright-tests .
     - docker run --network my-private-ntwk playwright-tests
   artifacts:
