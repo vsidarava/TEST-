@@ -29,6 +29,7 @@ playwright:
     - sleep 2
     - docker info
     - npm ci
+    - npx playwright install-deps
     - npx playwright test
   artifacts:
     when: always

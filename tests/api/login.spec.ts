@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('successful login', async ({ request }) => {
-  const response = await request.post('http://localhost:4001/users/signin', {
+  const response = await request.post('http://host.docker.internal:4001/users/signin', {
     data: {
       username: 'admin',
       password: 'admin'
