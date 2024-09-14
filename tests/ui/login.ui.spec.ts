@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:8081';
+console.log('frontendUrl', frontendUrl);
 
 test('successful login', async ({ page }) => {
   // Go to the login page
