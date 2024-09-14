@@ -26,11 +26,9 @@ playwright:
     - cd awesome-localstack
     - docker compose -f docker-compose-ci.yml up -d
     - cd ..
-    - sleep 2
-    - docker info
-    - npm ci
-    - npx playwright install-deps
-    - npx playwright test
+    - sleep 60
+    - docker build -t playwright-tests .
+    - docker run --network my-private-ntwk playwright-tests
   artifacts:
     when: always
     paths:
