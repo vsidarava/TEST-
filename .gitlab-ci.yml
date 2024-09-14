@@ -1,4 +1,4 @@
-image: mcr.microsoft.com/playwright:v1.46.0-jammy
+image: mcr.microsoft.com/playwright:v1.47.1-noble
 
 services:
   - docker:24.0.5-dind
@@ -11,22 +11,23 @@ stages:
   - test
 
 before_script:
-  - apt-get update
-  - apt-get install -y docker-ce-cli
-  - docker info
+  - apt-get update && apt-get install -y git docker-compose
 
 playwright:
   stage: test
-  before_script:
+  script:
     - git clone https://github.com/slawekradzyminski/awesome-localstack.git
     - cd awesome-localstack
     - chmod +x run-docker-compose-ci.sh
     - ./run-docker-compose-ci.sh
     - cd ..
-  script:
+    - docker info
     - npm ci
-    - npx playwright install --with-deps
     - npx playwright test
+  after_script:
+    - cd awesome-localstack
+    - docker-compose down
+    - cd ..
   artifacts:
     when: always
     paths:
