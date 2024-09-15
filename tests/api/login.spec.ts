@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { attemptLogin } from "../../requests/postSignIn";
-import { LoginResponse } from "../../types/api/postSignInTypes";
+import { LoginResponse, ErrorLoginResponse } from "../../types/api/postSignInTypes";
 import { Roles } from "../../types/api/roles";
 test("successful login", async ({ request }) => {
   // when
@@ -28,12 +28,12 @@ test('failed login', async ({ request }) => {
 
   // then
   expect(response.status()).toBe(422);
-  const responseBody = await response.json();
-  expect(responseBody).toEqual({
-    timestamp: expect.any(String),
+  const responseBody = await response.json() as ErrorLoginResponse;
+  expect(responseBody).toEqual(expect.objectContaining({
     status: 422,
     error: 'Unprocessable Entity',
     message: 'Invalid username/password supplied',
     path: '/users/signin'
-  });
+  } satisfies Partial<ErrorLoginResponse>));
+  expect(responseBody.timestamp).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/);
 });

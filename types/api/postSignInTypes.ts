@@ -8,3 +8,11 @@ export interface LoginResponse {
   token: string;
   email: string;
 }
+
+export interface ErrorLoginResponse {
+  timestamp: string;
+  status: number;
+  error: string;
+  message: string;
+  path: string;
+};
