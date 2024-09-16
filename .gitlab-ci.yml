@@ -1,14 +1,33 @@
-image: mcr.microsoft.com/playwright:v1.46.0-jammy
+image: mcr.microsoft.com/playwright:v1.47.1-noble
+
+services:
+  - docker:24.0.5-dind
+
+variables:
+  DOCKER_HOST: tcp://docker:2376
+  DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_TLS_VERIFY: 1
+  DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
 
 stages:
   - test
 
+before_script:
+  - apt-get update && apt-get install -y git curl
+  - curl -fsSL https://get.docker.com -o get-docker.sh
+  - sh get-docker.sh
+  - curl -L "https://github.com/docker/compose/releases/download/v2.29.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  - chmod +x /usr/local/bin/docker-compose
+
 playwright:
   stage: test
   script:
-    - npm ci
-    - npx playwright install --with-deps
-    - npx playwright test
+    - git clone https://github.com/slawekradzyminski/awesome-localstack.git
+    - cd awesome-localstack
+    - docker compose -f docker-compose-gitlab-ci.yml up -d
+    - cd ..
+    - docker build -t playwright-tests .
+    - docker run --network awesome-localstack_my-private-ntwk playwright-tests
   artifacts:
     when: always
     paths:
